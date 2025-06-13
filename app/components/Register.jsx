@@ -11,9 +11,13 @@ import {
   Platform,
   StatusBar,
   Keyboard,
+  Dimensions
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+
+// Get screen dimensions at the top level
+const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -121,62 +125,68 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 20 : 60,
-    paddingBottom: 20,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + windowHeight * 0.03 : windowHeight * 0.08,
+    paddingBottom: windowHeight * 0.025,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 140,
+    height: windowHeight * 0.18,
   },
   headerText: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: windowWidth * 0.06,
     fontWeight: 'bold',
   },
   scrollContent: {
     flexGrow: 1,
   },
   formContainer: {
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 40,
+    paddingHorizontal: windowWidth * 0.07,
+    paddingTop: windowHeight * 0.03,
+    paddingBottom: windowHeight * 0.05,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
-    padding: Platform.OS === 'ios' ? 16 : 14,
-    marginBottom: 20,
-    fontSize: 16,
+    borderRadius: windowWidth * 0.02,
+    padding: Platform.OS === 'ios' ? windowHeight * 0.02 : windowHeight * 0.018,
+    marginBottom: windowHeight * 0.025,
+    fontSize: windowWidth * 0.04,
     backgroundColor: '#fff',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: windowHeight * 0.002 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: windowWidth * 0.005,
     elevation: 2,
   },
-
+  addressInput: {
+    minHeight: windowHeight * 0.15,
+    textAlignVertical: 'top',
+  },
   bottomContainer: {
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: windowWidth * 0.07,
+    paddingVertical: windowHeight * 0.02,
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#eee',
   },
   registerButton: {
     backgroundColor: '#B10A10',
-    paddingVertical: 16,
-    borderRadius: 8,
+    paddingVertical: windowHeight * 0.02,
+    borderRadius: windowWidth * 0.02,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { 
+      width: 0, 
+      height: windowHeight * 0.003 
+    },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: windowWidth * 0.01,
     elevation: 3,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: windowWidth * 0.045,
     fontWeight: 'bold',
   },
 });

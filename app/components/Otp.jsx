@@ -10,9 +10,13 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  Dimensions
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+
+// Get screen dimensions at the top level
+const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
 const Otp = () => {
   const [otp, setOtp] = useState(['', '', '', '']);
@@ -20,7 +24,6 @@ const Otp = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Auto-focus the first input when component mounts
     if (inputs.current[0]) {
       inputs.current[0].focus();
     }
@@ -42,11 +45,7 @@ const Otp = () => {
       alert('Please enter the complete OTP');
       return;
     }
-
-    // For demonstration
     alert(`Entered OTP is: ${enteredOtp}`);
-
-    // Navigate to Register screen
     router.push('/components/Register');
   };
 
@@ -89,7 +88,7 @@ const Otp = () => {
 
           <TouchableOpacity onPress={handleResend}>
             <Text style={styles.resendText}>
-              Don’t receive OTP?{' '}
+              Don't receive OTP?{' '}
               <Text style={{ color: '#B10A10', fontWeight: 'bold' }}>Resend</Text>
             </Text>
           </TouchableOpacity>
@@ -105,8 +104,6 @@ const Otp = () => {
   );
 };
 
-export default Otp;
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -116,55 +113,57 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 40,
+    paddingVertical: windowHeight * 0.05,
     alignItems: 'center',
-    marginBottom: 100,
-    bottom:60
+    marginBottom: windowHeight * 0.12,
+    bottom: windowHeight * 0.07,
   },
   headerText: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: windowWidth * 0.06,
     fontWeight: 'bold',
-    marginTop: 40,
+    marginTop: windowHeight * 0.05,
   },
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingHorizontal: 24,
-    marginBottom: 20,
+    paddingHorizontal: windowWidth * 0.07,
+    marginBottom: windowHeight * 0.03,
   },
   otpInput: {
-    width: 50,
-    height: 50,
+    width: windowWidth * 0.12,
+    height: windowWidth * 0.12,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
+    borderRadius: windowWidth * 0.02,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: windowWidth * 0.05,
   },
   resendText: {
     textAlign: 'center',
-    fontSize: 14,
-    marginBottom: 30,
+    fontSize: windowWidth * 0.035,
+    marginBottom: windowHeight * 0.04,
     color: '#000',
   },
   bottom: {
     position: 'absolute',
-    bottom: 30,
+    bottom: windowHeight * 0.04,
     width: '100%',
-    paddingHorizontal: 24,
+    paddingHorizontal: windowWidth * 0.07,
   },
   verifyButton: {
     backgroundColor: '#B10A10',
-    paddingVertical: 15,
-    borderRadius: 8,
+    paddingVertical: windowHeight * 0.018,
+    borderRadius: windowWidth * 0.02,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: windowWidth * 0.04,
   },
 });
 
+export default Otp;
 
 

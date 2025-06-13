@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 // Import images
 import acservice from '../../assets/images/acservice.jpg';
@@ -93,6 +94,18 @@ const trendingCategories = [
   { id: 4, title: 'Salon 2', image: saloon },
 ];
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+ const router = useRouter();
+
+// Calculate responsive sizes based on screen dimensions
+const itemSize = (windowWidth - 48) / 4; // 16 padding on each side + 8 margin between items
+const fitnessImageSize = windowWidth * 0.2;
+const homeServiceImageSize = windowWidth * 0.18;
+const recentSearchItemWidth = windowWidth * 0.28;
+const recentAdImageWidth = windowWidth * 0.9;
+const trendingImageWidth = (windowWidth - 48) / 2; // Two items per row with padding
+
 
 
 
@@ -127,7 +140,7 @@ export default function Home() {
         <Text style={styles.heading}>Categories</Text>
 
         {/* Grid of Categories */}
-        <FlatList
+        {/* <FlatList
           data={categories}
           keyExtractor={(item, index) => index.toString()}
           numColumns={4}
@@ -152,7 +165,41 @@ export default function Home() {
               )}
             </TouchableOpacity>
           )}
-        />
+        /> */}
+
+        <FlatList
+  data={categories}
+  keyExtractor={(item, index) => index.toString()}
+  numColumns={4}
+  initialNumToRender={12}
+  removeClippedSubviews={true}
+  scrollEnabled={false}
+  contentContainerStyle={styles.grid}
+  renderItem={({ item }) => (
+    <TouchableOpacity
+      style={styles.gridItem}
+      onPress={() => {
+        if (item.isMore) {
+          router.push('/components/Categories');
+        }
+      }}
+    >
+      {item.isMore ? (
+        <>
+          <View style={styles.moreBox}>
+            <Ionicons name="chevron-forward" size={24} color="#000" />
+          </View>
+          <Text style={styles.itemText}>{item.title}</Text>
+        </>
+      ) : (
+        <>
+          <Image source={item.image} style={styles.image} />
+          <Text style={styles.itemText}>{item.title}</Text>
+        </>
+      )}
+    </TouchableOpacity>
+  )}
+/>
 
         {/* Fitness Section */}
         <View style={styles.fitnessSection}>
@@ -301,11 +348,11 @@ export default function Home() {
               <Ionicons name="home" size={24} color="#fff" />
               <Text style={styles.footerText}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerItem}>
+            <TouchableOpacity style={styles.footerItem} onPress={() => router.push('/components/Categories')}>
               <Ionicons name="grid" size={24} color="#fff" />
               <Text style={styles.footerText}>Category</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerItem}>
+            <TouchableOpacity  style={styles.footerItem} onPress={() => router.push('/components/Enquirystatus')}>
               <Ionicons name="chatbox" size={24} color="#fff" />
               <Text style={styles.footerText}>Enquiry</Text>
             </TouchableOpacity>
@@ -320,27 +367,24 @@ export default function Home() {
   );
 }
 
-const windowWidth = Dimensions.get('window').width;
-const itemSize = (windowWidth - 32 - 32) / 4; // 32 = horizontal padding (16*2), 32 = total margin (8*4)
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
-    
   },
   header: {
-    paddingHorizontal: 16,
+    paddingHorizontal: windowWidth * 0.04, // ~16px on standard screen
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    paddingBottom: 16,
+    paddingBottom: windowHeight * 0.05,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 140,
-    bottom:60
+    height: windowHeight * 0.18,
+    bottom: windowHeight * 0.06
   },
   menuIcon: {
-    marginRight: 12,
-    top:30
+    marginRight: windowWidth * 0.03,
+    top: windowHeight * 0.03
   },
   searchContainer: {
     flexDirection: 'row',
@@ -348,79 +392,79 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    height: 40,
-    top:30
+    paddingHorizontal: windowWidth * 0.025,
+    height: windowHeight * 0.05,
+    top: windowHeight * 0.03
   },
   searchIcon: {
-    marginRight: 6,
+    marginRight: windowWidth * 0.015,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: windowWidth * 0.04,
     color: '#000',
   },
   scrollContent: {
-    paddingBottom: 20,
-    bottom:9
+    paddingBottom: windowHeight * 0.02,
+    bottom: windowHeight * 0.01
   },
   heading: {
-    fontSize: 18,
+    fontSize: windowWidth * 0.045,
     fontWeight: 'bold',
-    marginVertical: 16,
-    marginHorizontal: 16,
+    marginVertical: windowHeight * 0.02,
+    marginHorizontal: windowWidth * 0.04,
     color: '#333',
   },
   grid: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+    paddingHorizontal: windowWidth * 0.04,
+    paddingBottom: windowHeight * 0.025,
   },
   gridItem: {
     width: itemSize,
-    margin: 4,
+    margin: windowWidth * 0.01,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
-    width: 60,
-    height: 60,
+    width: windowWidth * 0.14,
+    height: windowWidth * 0.14,
     borderRadius: 8,
-    marginBottom: 6,
+    marginBottom: windowHeight * 0.005,
   },
   itemText: {
-    fontSize: 10,
+    fontSize: windowWidth * 0.028,
     textAlign: 'center',
     color: '#333',
-    marginTop: 4,
+    marginTop: windowHeight * 0.005,
   },
   moreBox: {
-    width: 60,
-    height: 60,
+    width: windowWidth * 0.14,
+    height: windowWidth * 0.14,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: windowHeight * 0.005,
   },
   fitnessSection: {
-    marginHorizontal: 16,
+    marginHorizontal: windowWidth * 0.04,
     borderRadius: 12,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: windowHeight * 0.025,
   },
   fitnessBackground: {
-    padding: 12,
+    padding: windowWidth * 0.03,
     borderRadius: 12,
   },
   fitnessHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: windowHeight * 0.015,
   },
   fitnessTitle: {
-    fontSize: 16,
+    fontSize: windowWidth * 0.04,
     fontWeight: 'bold',
     color: '#333',
   },
@@ -429,174 +473,147 @@ const styles = StyleSheet.create({
   },
   fitnessItem: {
     alignItems: 'center',
-    marginRight: 46,
+    marginRight: windowWidth * 0.12,
   },
   fitnessImage: {
-  width: 80,
-  height: 110,
-  borderRadius: 6,
-  marginBottom: 6,
-  borderWidth: 2,
-  borderColor: '#fff',
+    width: fitnessImageSize,
+    height: fitnessImageSize * 1.375, // Maintain aspect ratio
+    borderRadius: 6,
+    marginBottom: windowHeight * 0.007,
+    borderWidth: 2,
+    borderColor: '#fff',
   },
   fitnessItemText: {
-    fontSize: 12,
+    fontSize: windowWidth * 0.03,
     color: '#333',
     fontWeight: 'bold',
   },
-
   homeServicesSection: {
-  marginHorizontal: 16,
-  marginBottom: 20,
-},
-
-homeServicesHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-},
-
-homeServicesList: {
-  flexDirection: 'row',
-  paddingLeft: 2,
-},
-
-homeServiceItem: {
-  alignItems: 'center',
-  marginRight: 20,
-},
-
-homeServiceImage: {
-  width: 75,
-  height: 100,
-  borderRadius: 8,
-  marginBottom: 6,
-  borderWidth: 2,
-  borderColor: '#fff',
-},
-
-homeServiceText: {
-  fontSize: 12,
-  color: '#333',
-  fontWeight: 'bold',
-},
-
-recentSearchSection: {
-  marginHorizontal: 16,
-  marginBottom: 20,
-},
-
-recentSearchHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-},
-
-recentSearchList: {
-  flexDirection: 'row',
-},
-
-recentSearchItem: {
-  width: 110,
-  height:140,
-  padding: 10,
-  marginRight: 12,
-  borderRadius: 10,
-  position: 'relative',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-
-recentSearchImage: {
-  width: 80,
-  height: 80,
-  borderRadius: 40,
-  marginBottom: 6,
-},
-
-recentSearchText: {
-  fontSize: 12,
-  fontWeight: 'bold',
-  color: '#333',
-  textAlign: 'center',
-},
-
-closeIcon: {
-  position: 'absolute',
-  top: 6,
-  right: 6,
-  width: 16,
-  height: 16,
-  borderRadius: 8,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1,
-},
-
-recentAdsSection: {
-  marginHorizontal: 16,
-  marginBottom: 20,
-},
-
-recentAdsHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-},
-
-recentAdsList: {
-  flexDirection: 'row',
-},
-
-recentAdImage: {
-  width: 360,
-  height: 150,
-  borderRadius: 6,
-  marginRight: 12,
-},
-
-trendingSection: {
-  marginHorizontal: 16,
-  marginBottom: 20,
-},
-
-trendingHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-},
-
-trendingList: {
-  flexDirection: 'row',
-},
-
-trendingItem: {
-  alignItems: 'center',
-  marginRight: 20,
-},
-
-trendingImage: {
-  width: 165,
-  height: 130,
-  borderRadius: 10,
-  marginBottom: 6,
-},
-
-trendingText: {
-  fontSize: 12,
-  fontWeight: 'bold',
-  color: '#333',
-  textAlign: 'center',
-},
-
-
-
-
+    marginHorizontal: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.025,
+  },
+  homeServicesHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.015,
+  },
+  homeServicesList: {
+    flexDirection: 'row',
+    paddingLeft: windowWidth * 0.005,
+  },
+  homeServiceItem: {
+    alignItems: 'center',
+    marginRight: windowWidth * 0.05,
+  },
+  homeServiceImage: {
+    width: homeServiceImageSize,
+    height: homeServiceImageSize * 1.333, // 4:3 aspect ratio
+    borderRadius: 8,
+    marginBottom: windowHeight * 0.007,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  homeServiceText: {
+    fontSize: windowWidth * 0.03,
+    color: '#333',
+    fontWeight: 'bold',
+  },
+  recentSearchSection: {
+    marginHorizontal: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.025,
+  },
+  recentSearchHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.015,
+  },
+  recentSearchList: {
+    flexDirection: 'row',
+  },
+  recentSearchItem: {
+    width: recentSearchItemWidth,
+    height: recentSearchItemWidth * 1.27, // Maintain aspect ratio
+    padding: windowWidth * 0.025,
+    marginRight: windowWidth * 0.03,
+    borderRadius: 10,
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recentSearchImage: {
+    width: recentSearchItemWidth * 0.7,
+    height: recentSearchItemWidth * 0.7,
+    borderRadius: recentSearchItemWidth * 0.35,
+    marginBottom: windowHeight * 0.007,
+  },
+  recentSearchText: {
+    fontSize: windowWidth * 0.03,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: windowHeight * 0.007,
+    right: windowHeight * 0.007,
+    width: windowWidth * 0.04,
+    height: windowWidth * 0.04,
+    borderRadius: windowWidth * 0.02,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  recentAdsSection: {
+    marginHorizontal: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.025,
+  },
+  recentAdsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.015,
+  },
+  recentAdsList: {
+    flexDirection: 'row',
+  },
+  recentAdImage: {
+    width: recentAdImageWidth,
+    height: recentAdImageWidth * 0.416, // 2.4:1 aspect ratio
+    borderRadius: 6,
+    marginRight: windowWidth * 0.03,
+  },
+  trendingSection: {
+    marginHorizontal: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.025,
+  },
+  trendingHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.015,
+  },
+  trendingList: {
+    flexDirection: 'row',
+  },
+  trendingItem: {
+    alignItems: 'center',
+    marginRight: windowWidth * 0.05,
+  },
+  trendingImage: {
+    width: trendingImageWidth,
+    height: trendingImageWidth * 0.8, // 5:4 aspect ratio
+    borderRadius: 10,
+    marginBottom: windowHeight * 0.007,
+  },
+  trendingText: {
+    fontSize: windowWidth * 0.03,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+  },
   footerContainer: {
     backgroundColor: '#B10A10',
   },
@@ -607,16 +624,16 @@ trendingText: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+    paddingVertical: windowHeight * 0.015,
+    paddingBottom: Platform.OS === 'ios' ? windowHeight * 0.03 : windowHeight * 0.015,
   },
   footerItem: {
     alignItems: 'center',
   },
   footerText: {
     color: '#fff',
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: windowWidth * 0.03,
+    marginTop: windowHeight * 0.005,
   },
 });
 
