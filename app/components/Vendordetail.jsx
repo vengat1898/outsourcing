@@ -171,7 +171,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   mainHeading: {
-    fontSize: 22,
+    marginTop:30,
+    fontSize: 17,
     fontWeight: 'bold',
     marginBottom: 10,
   },

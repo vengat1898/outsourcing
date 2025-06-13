@@ -70,7 +70,11 @@ const Vendorlist = () => {
       </View>
 
       {/* Vendor Box */}
-      <View style={styles.vendorContainer}>
+      {/* Vendor Box - Made Entirely Touchable */}
+    <TouchableOpacity 
+     style={styles.vendorContainer}
+     onPress={() => router.push('/components/Vendordetail')}
+    >
         <View style={styles.vendorBox}>
           <View style={styles.vendorLeft}>
             <Text style={styles.vendorTitle}>AC Service</Text>
@@ -134,7 +138,7 @@ const Vendorlist = () => {
         {/* Action Buttons Row */}
 <View style={styles.vendorActions}>
   <View style={styles.actionWrapper}>
-    <TouchableOpacity onPress={() => router.push('/components/Vendordetail')}>
+    <TouchableOpacity onPress={() => router.push('/components/Enquirynow')}>
       <LinearGradient colors={['#B10A10', '#1B1B1B']} style={styles.actionButton}>
         <Text style={styles.actionButtonText}>Enquiry now</Text>
       </LinearGradient>
@@ -156,7 +160,7 @@ const Vendorlist = () => {
   </View>
 </View>
 
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

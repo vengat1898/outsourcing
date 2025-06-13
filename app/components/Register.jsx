@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -14,9 +14,9 @@ import {
   Dimensions
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
-// Get screen dimensions at the top level
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
 export default function Register() {
@@ -25,8 +25,14 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+
+  const mobileInput = useRef(null);
+  const emailInput = useRef(null);
+  const addressInput = useRef(null);
 
   const handleRegister = () => {
+    Keyboard.dismiss();
     if (!name || !mobile || !email || !address) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
@@ -35,19 +41,23 @@ export default function Register() {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       >
-        <View style={{ flex: 1 }}>
+        <View style={styles.contentWrapper}>
           <LinearGradient
             colors={['#B10A10', '#1B1B1B']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.header}
+            style={{
+              ...styles.header,
+              paddingTop: insets.top + windowHeight * 0.03,
+              paddingBottom: windowHeight * 0.025,
+            }}
           >
             <Text style={styles.headerText}>Register</Text>
           </LinearGradient>
@@ -64,20 +74,22 @@ export default function Register() {
                 placeholderTextColor="#999"
                 value={name}
                 onChangeText={setName}
-                returnKeyType="done"
-                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="next"
+                onSubmitEditing={() => mobileInput.current?.focus()}
               />
               <TextInput
+                ref={mobileInput}
                 style={styles.input}
                 placeholder="Mobile Number"
                 placeholderTextColor="#999"
                 value={mobile}
                 onChangeText={setMobile}
                 keyboardType="phone-pad"
-                returnKeyType="done"
-                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="next"
+                onSubmitEditing={() => emailInput.current?.focus()}
               />
               <TextInput
+                ref={emailInput}
                 style={styles.input}
                 placeholder="Email"
                 placeholderTextColor="#999"
@@ -85,10 +97,11 @@ export default function Register() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                returnKeyType="done"
-                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="next"
+                onSubmitEditing={() => addressInput.current?.focus()}
               />
               <TextInput
+                ref={addressInput}
                 style={[styles.input, styles.addressInput]}
                 placeholder="Address"
                 placeholderTextColor="#999"
@@ -96,23 +109,23 @@ export default function Register() {
                 onChangeText={setAddress}
                 multiline
                 returnKeyType="done"
-                onSubmitEditing={Keyboard.dismiss}
+                onSubmitEditing={handleRegister}
               />
             </View>
           </ScrollView>
-        </View>
 
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity 
-            style={styles.registerButton} 
-            onPress={handleRegister}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity 
+              style={styles.registerButton} 
+              onPress={handleRegister}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -124,12 +137,12 @@ const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
   },
+  contentWrapper: {
+    flex: 1,
+  },
   header: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + windowHeight * 0.03 : windowHeight * 0.08,
-    paddingBottom: windowHeight * 0.025,
     alignItems: 'center',
     justifyContent: 'center',
-    height: windowHeight * 0.18,
   },
   headerText: {
     color: '#fff',
@@ -138,11 +151,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: windowHeight * 0.1,
   },
   formContainer: {
     paddingHorizontal: windowWidth * 0.07,
     paddingTop: windowHeight * 0.03,
-    paddingBottom: windowHeight * 0.05,
   },
   input: {
     borderWidth: 1,
@@ -162,12 +175,10 @@ const styles = StyleSheet.create({
     minHeight: windowHeight * 0.15,
     textAlignVertical: 'top',
   },
-  bottomContainer: {
+  buttonContainer: {
     paddingHorizontal: windowWidth * 0.07,
-    paddingVertical: windowHeight * 0.02,
+    paddingBottom: windowHeight * 0.03,
     backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
   },
   registerButton: {
     backgroundColor: '#B10A10',
@@ -190,6 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 
 

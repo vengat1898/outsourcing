@@ -9,6 +9,7 @@ import {
   StatusBar,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,6 +22,18 @@ const Enquirynow = () => {
   const [mobile, setMobile] = useState('');
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
+
+  const handleEnquiry = () => {
+    if (name && mobile && category && message) {
+      Alert.alert('Success', 'Enquiry Sent Successfully');
+      setName('');
+      setMobile('');
+      setCategory('');
+      setMessage('');
+    } else {
+      Alert.alert('Error', 'Please fill out all fields');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -76,7 +89,7 @@ const Enquirynow = () => {
             placeholderTextColor="#999"
           />
 
-          <TouchableOpacity onPress={() => console.log('Enquiry Submitted')}>
+          <TouchableOpacity onPress={handleEnquiry}>
             <LinearGradient
               colors={['#B10A10', '#1B1B1B']}
               style={styles.submitButton}
@@ -139,4 +152,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 

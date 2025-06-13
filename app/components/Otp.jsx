@@ -7,16 +7,13 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-  Dimensions
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-
-// Get screen dimensions at the top level
-const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
 const Otp = () => {
   const [otp, setOtp] = useState(['', '', '', '']);
@@ -33,7 +30,6 @@ const Otp = () => {
     const newOtp = [...otp];
     newOtp[index] = text;
     setOtp(newOtp);
-
     if (text && index < 3) {
       inputs.current[index + 1].focus();
     }
@@ -45,7 +41,7 @@ const Otp = () => {
       alert('Please enter the complete OTP');
       return;
     }
-    alert(`Entered OTP is: ${enteredOtp}`);
+    // alert(Entered OTP is: ${enteredOtp});
     router.push('/components/Register');
   };
 
@@ -55,115 +51,122 @@ const Otp = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.container}
         >
-          <LinearGradient
-            colors={['#B10A10', '#1B1B1B']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.header}
-          >
-            <Text style={styles.headerText}>OTP</Text>
-          </LinearGradient>
+          <View style={{ flex: 1 }}>
+            <LinearGradient
+              colors={['#B10A10', '#1B1B1B']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.header}
+            >
+              <Text style={styles.headerText}>OTP</Text>
+            </LinearGradient>
 
-          <View style={styles.otpContainer}>
-            {otp.map((digit, index) => (
-              <TextInput
-                key={index}
-                style={styles.otpInput}
-                keyboardType="number-pad"
-                maxLength={1}
-                value={digit}
-                onChangeText={(text) => handleChange(text, index)}
-                ref={(ref) => (inputs.current[index] = ref)}
-                textContentType="oneTimeCode"
-                autoComplete="sms-otp"
-                returnKeyType={index === otp.length - 1 ? 'done' : 'next'}
-              />
-            ))}
-          </View>
+            <View style={styles.content}>
+              <View style={styles.otpContainer}>
+                {otp.map((digit, index) => (
+                  <TextInput
+                    key={index}
+                    style={styles.otpInput}
+                    keyboardType="number-pad"
+                    maxLength={1}
+                    value={digit}
+                    onChangeText={(text) => handleChange(text, index)}
+                    ref={(ref) => (inputs.current[index] = ref)}
+                    textContentType="oneTimeCode"
+                    autoComplete="sms-otp"
+                    returnKeyType={index === otp.length - 1 ? 'done' : 'next'}
+                  />
+                ))}
+              </View>
 
-          <TouchableOpacity onPress={handleResend}>
-            <Text style={styles.resendText}>
-              Don't receive OTP?{' '}
-              <Text style={{ color: '#B10A10', fontWeight: 'bold' }}>Resend</Text>
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity onPress={handleResend}>
+                <Text style={styles.resendText}>
+                  Don't receive OTP?{' '}
+                  <Text style={{ color: '#B10A10', fontWeight: 'bold' }}>Resend</Text>
+                </Text>
+              </TouchableOpacity>
 
-          <View style={styles.bottom}>
-            <TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
-              <Text style={styles.buttonText}>Verify</Text>
-            </TouchableOpacity>
+              <View style={styles.centeredButton}>
+                <TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
+                  <Text style={styles.buttonText}>Verify</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  container: {
-    flex: 1,
-  },
   header: {
-    paddingVertical: windowHeight * 0.05,
+    height: 120,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: windowHeight * 0.12,
-    bottom: windowHeight * 0.07,
   },
   headerText: {
     color: '#fff',
-    fontSize: windowWidth * 0.06,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginTop: windowHeight * 0.05,
+    marginTop: 40,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
   },
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingHorizontal: windowWidth * 0.07,
-    marginBottom: windowHeight * 0.03,
+    paddingHorizontal: 30,
+    marginBottom: 30,
   },
   otpInput: {
-    width: windowWidth * 0.12,
-    height: windowWidth * 0.12,
+    width: 50,
+    height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: windowWidth * 0.02,
+    borderRadius: 10,
     textAlign: 'center',
-    fontSize: windowWidth * 0.05,
+    fontSize: 20,
+    backgroundColor: '#fff',
   },
   resendText: {
     textAlign: 'center',
-    fontSize: windowWidth * 0.035,
-    marginBottom: windowHeight * 0.04,
+    fontSize: 14,
+    marginBottom: 30,
     color: '#000',
   },
-  bottom: {
-    position: 'absolute',
-    bottom: windowHeight * 0.04,
-    width: '100%',
-    paddingHorizontal: windowWidth * 0.07,
+  centeredButton: {
+    alignItems: 'center',
   },
   verifyButton: {
     backgroundColor: '#B10A10',
-    paddingVertical: windowHeight * 0.018,
-    borderRadius: windowWidth * 0.02,
-    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 80,
+    borderRadius: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: windowWidth * 0.04,
+    fontSize: 16,
   },
 });
 
 export default Otp;
+
+
+
+
+
 
 

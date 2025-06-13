@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   gradientButton: {
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: 5,
     alignItems: 'center',
   },
   unselectedButton: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#B10A10',
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: 5,
     alignItems: 'center',
   },
   buttonTextSelected: {
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#F2F2F2',
     margin: 16,
-    borderRadius: 10,
+    borderRadius: 5,
     padding: 12,
     elevation: 3,
   },

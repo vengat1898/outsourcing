@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import topbanner from '../../assets/images/bannerimg.png';
 
 // Import images
 import acservice from '../../assets/images/acservice.jpg';
@@ -136,38 +137,57 @@ export default function Home() {
 
       {/* Scrollable Body */}
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          {/* Top Banner Image */}
+     <View style={styles.bannerContainer}>
+       <Image 
+      source={topbanner} 
+      style={styles.bannerImage}
+      resizeMode="cover"
+    />
+    </View>
         {/* Heading */}
-        <Text style={styles.heading}>Categories</Text>
+        <Text style={styles.heading}>Professions</Text>
 
         {/* Grid of Categories */}
+       <FlatList
+  data={categories}
+  keyExtractor={(item, index) => index.toString()}
+  numColumns={4}
+  initialNumToRender={12}
+  removeClippedSubviews={true}
+  scrollEnabled={false}
+  contentContainerStyle={styles.grid}
+  renderItem={({ item }) => (
+    <TouchableOpacity
+      style={styles.gridItem}
+      onPress={() => {
+        if (item.isMore) {
+          router.push('/components/Categories');
+        } else {
+          router.push({
+            pathname: '/components/Vendorlist',
+            params: { category: item.title } // Passing category name as parameter
+          });
+        }
+      }}
+    >
+      {item.isMore ? (
+        <>
+          <View style={styles.moreBox}>
+            <Ionicons name="chevron-forward" size={24} color="#000" />
+          </View>
+          <Text style={styles.itemText}>{item.title}</Text>
+        </>
+      ) : (
+        <>
+          <Image source={item.image} style={styles.image} />
+          <Text style={styles.itemText}>{item.title}</Text>
+        </>
+      )}
+    </TouchableOpacity>
+  )}
+/>
         {/* <FlatList
-          data={categories}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={4}
-          initialNumToRender={12}
-          removeClippedSubviews={true}
-          scrollEnabled={false} // Disable FlatList scrolling inside ScrollView
-          contentContainerStyle={styles.grid}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.gridItem}>
-              {item.isMore ? (
-                <>
-                  <View style={styles.moreBox}>
-                    <Ionicons name="chevron-forward" size={24} color="#000" />
-                  </View>
-                  <Text style={styles.itemText}>{item.title}</Text>
-                </>
-              ) : (
-                <>
-                  <Image source={item.image} style={styles.image} />
-                  <Text style={styles.itemText}>{item.title}</Text>
-                </>
-              )}
-            </TouchableOpacity>
-          )}
-        /> */}
-
-        <FlatList
   data={categories}
   keyExtractor={(item, index) => index.toString()}
   numColumns={4}
@@ -199,13 +219,13 @@ export default function Home() {
       )}
     </TouchableOpacity>
   )}
-/>
+/> */}
 
         {/* Fitness Section */}
         <View style={styles.fitnessSection}>
             <View style={styles.fitnessHeader}>
               <Text style={styles.fitnessTitle}>Fitness</Text>
-              <TouchableOpacity>
+              <TouchableOpacity >
                 <Ionicons name="chevron-forward-circle" size={24} color="#B10A10" />
               </TouchableOpacity>
             </View>
@@ -223,10 +243,13 @@ export default function Home() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.fitnessList}
               renderItem={({ item }) => (
-                <View style={styles.fitnessItem}>
-                  <Image source={item.image} style={styles.fitnessImage} />
-                  <Text style={styles.fitnessItemText}>{item.title}</Text>
-                </View>
+                 <TouchableOpacity 
+              style={styles.fitnessItem}
+      onPress={() => router.push('/components/Vendorlist')}
+    >
+      <Image source={item.image} style={styles.fitnessImage} />
+      <Text style={styles.fitnessItemText}>{item.title}</Text>
+    </TouchableOpacity>
               )}
             />
           </ImageBackground>
@@ -246,10 +269,14 @@ export default function Home() {
     contentContainerStyle={styles.homeServicesList}
   >
     {homeServices.map((item, index) => (
-      <View key={index} style={styles.homeServiceItem}>
-        <Image source={item.image} style={styles.homeServiceImage} />
-        <Text style={styles.homeServiceText}>{item.title}</Text>
-      </View>
+      <TouchableOpacity 
+    key={index} 
+    style={styles.homeServiceItem}
+    onPress={() => router.push('/components/Vendorlist')}
+  >
+    <Image source={item.image} style={styles.homeServiceImage} />
+    <Text style={styles.homeServiceText}>{item.title}</Text>
+  </TouchableOpacity>
     ))}
   </ScrollView>
 </View>
@@ -269,17 +296,29 @@ export default function Home() {
     contentContainerStyle={styles.recentSearchList}
   >
     {recentSearches.map((item, index) => (
-      <LinearGradient
+      <TouchableOpacity 
         key={index}
-        colors={['#B6F6EF', '#DEF4F2']}
-        style={styles.recentSearchItem}
+        onPress={() => router.push('/components/Vendorlist')}
       >
-        <TouchableOpacity style={styles.closeIcon}>
-          <Ionicons name="close" size={12} color="#000" />
-        </TouchableOpacity>
-        <Image source={item.image} style={styles.recentSearchImage} />
-        <Text style={styles.recentSearchText}>{item.title}</Text>
-      </LinearGradient>
+        <LinearGradient
+          colors={['#B6F6EF', '#DEF4F2']}
+          style={styles.recentSearchItem}
+        >
+          <TouchableOpacity 
+            style={styles.closeIcon}
+            onPress={(e) => {
+              e.stopPropagation(); // Prevent the parent TouchableOpacity from triggering
+              // Add your close functionality here
+              console.log('Close item:', item.title);
+              // You might want to remove this item from recentSearches
+            }}
+          >
+            <Ionicons name="close" size={12} color="#000" />
+          </TouchableOpacity>
+          <Image source={item.image} style={styles.recentSearchImage} />
+          <Text style={styles.recentSearchText}>{item.title}</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     ))}
   </ScrollView>
 </View>
@@ -288,7 +327,7 @@ export default function Home() {
 <View style={styles.recentAdsSection}>
   <View style={styles.recentAdsHeader}>
     <Text style={styles.fitnessTitle}>Recent Ads</Text>
-    <TouchableOpacity>
+    <TouchableOpacity >
       <Ionicons name="chevron-forward-circle" size={24} color="#B10A10" />
     </TouchableOpacity>
   </View>
@@ -325,7 +364,7 @@ export default function Home() {
     contentContainerStyle={styles.trendingList}
   >
     {trendingCategories.map((item) => (
-      <TouchableOpacity key={item.id} style={styles.trendingItem}>
+      <TouchableOpacity key={item.id} style={styles.trendingItem} onPress={() => router.push('/components/Vendorlist')}>
         <Image source={item.image} style={styles.trendingImage} />
         <Text style={styles.trendingText}>{item.title}</Text>
       </TouchableOpacity>
@@ -408,6 +447,23 @@ const styles = StyleSheet.create({
     paddingBottom: windowHeight * 0.02,
     bottom: windowHeight * 0.01
   },
+   bannerContainer: {
+    marginHorizontal: windowWidth * 0.03,
+    marginTop: windowHeight * 0.025,
+    borderRadius: 2,
+    overflow: 'hidden',
+    // elevation: 3,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 4,
+    alignItems: 'center', // This will center the image horizontally
+  },
+  bannerImage: {
+    width: windowWidth * 0.90,
+    height: windowHeight * 0.17, // Adjust height as needed
+    borderRadius: 5,
+  },
   heading: {
     fontSize: windowWidth * 0.045,
     fontWeight: 'bold',
@@ -455,7 +511,7 @@ const styles = StyleSheet.create({
   },
   fitnessBackground: {
     padding: windowWidth * 0.03,
-    borderRadius: 12,
+    borderRadius: 5,
   },
   fitnessHeader: {
     flexDirection: 'row',
@@ -478,7 +534,7 @@ const styles = StyleSheet.create({
   fitnessImage: {
     width: fitnessImageSize,
     height: fitnessImageSize * 1.375, // Maintain aspect ratio
-    borderRadius: 6,
+    borderRadius: 5,
     marginBottom: windowHeight * 0.007,
     borderWidth: 2,
     borderColor: '#fff',
@@ -582,7 +638,7 @@ const styles = StyleSheet.create({
   recentAdImage: {
     width: recentAdImageWidth,
     height: recentAdImageWidth * 0.416, // 2.4:1 aspect ratio
-    borderRadius: 6,
+    borderRadius: 5,
     marginRight: windowWidth * 0.03,
   },
   trendingSection: {
@@ -605,7 +661,7 @@ const styles = StyleSheet.create({
   trendingImage: {
     width: trendingImageWidth,
     height: trendingImageWidth * 0.8, // 5:4 aspect ratio
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: windowHeight * 0.007,
   },
   trendingText: {
