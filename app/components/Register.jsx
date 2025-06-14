@@ -41,27 +41,23 @@ export default function Register() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
-      >
-        <View style={styles.contentWrapper}>
-          <LinearGradient
-            colors={['#B10A10', '#1B1B1B']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={{
-              ...styles.header,
-              paddingTop: insets.top + windowHeight * 0.03,
-              paddingBottom: windowHeight * 0.025,
-            }}
-          >
-            <Text style={styles.headerText}>Register</Text>
-          </LinearGradient>
-
+    <View style={styles.fullContainer}>
+      <StatusBar barStyle="light-content" translucent />
+<LinearGradient
+  colors={['#B10A10', '#1B1B1B']}
+  start={{ x: 0, y: 0 }}
+  end={{ x: 1, y: 0 }}
+  style={[styles.header, { paddingTop: insets.top }]}
+>
+  <Text style={styles.headerText}>Register</Text>
+</LinearGradient>
+      
+      <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+        >
           <ScrollView
             contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
@@ -123,39 +119,56 @@ export default function Register() {
               <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  fullContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  gradientHeader: {
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: windowHeight * 0.025,
+    zIndex: 1,
+  },
+  
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: windowHeight * 0.12,
   },
   keyboardAvoidingView: {
     flex: 1,
   },
-  contentWrapper: {
-    flex: 1,
-  },
-  header: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerText: {
-    color: '#fff',
-    fontSize: windowWidth * 0.06,
-    fontWeight: 'bold',
-  },
+header: {
+  height: 120,
+  justifyContent: 'flex-end', // pushes text to the bottom
+  alignItems: 'center',
+  paddingBottom: 10, // same as OTP look
+},
+headerText: {
+  color: '#fff',
+  fontSize: 21,
+  fontWeight: 'bold',
+},
   scrollContent: {
     flexGrow: 1,
     paddingBottom: windowHeight * 0.1,
   },
   formContainer: {
     paddingHorizontal: windowWidth * 0.07,
-    paddingTop: windowHeight * 0.03,
+    paddingTop: windowHeight * 0.05, // Increased from 0.03 to 0.05 to move inputs down
+    marginTop: windowHeight * 0.02, // Added margin to push container down
   },
   input: {
     borderWidth: 1,
@@ -165,11 +178,11 @@ const styles = StyleSheet.create({
     marginBottom: windowHeight * 0.025,
     fontSize: windowWidth * 0.04,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: windowHeight * 0.002 },
-    shadowOpacity: 0.1,
-    shadowRadius: windowWidth * 0.005,
-    elevation: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: windowHeight * 0.002 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: windowWidth * 0.005,
+    // elevation: 2,
   },
   addressInput: {
     minHeight: windowHeight * 0.15,

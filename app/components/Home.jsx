@@ -395,7 +395,7 @@ export default function Home() {
               <Ionicons name="chatbox" size={24} color="#fff" />
               <Text style={styles.footerText}>Enquiry</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerItem}>
+            <TouchableOpacity style={styles.footerItem}onPress={() => router.push('/components/Profile')}>
               <Ionicons name="person" size={24} color="#fff" />
               <Text style={styles.footerText}>Profile</Text>
             </TouchableOpacity>
